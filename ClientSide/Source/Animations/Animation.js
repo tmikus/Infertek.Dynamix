@@ -58,13 +58,25 @@ Infertek.Animations.Animation.prototype = {
 		}
 	},
 	performAnimationFromStart: function () {
-		for (var animationPropertyIndex in this.properties) {
-			this.properties[animationPropertyIndex].processAnimation(((+new Date()) - this.animationStartTime) * this.timeScale);
+		for (var animationIndex = 0; animationIndex < this.animationsToProcess.length; animationIndex++) {
+			this.animationsToProcess[animationIndex].processAnimation(((+new Date()) - this.animationStartTime) * this.timeScale);
+			if (this.animationsToProcess[animationIndex].animationHasEnded) {
+				this.animationsToProcess.splice(animationIndex, 1);
+			}
+		}
+		if (this.animationsToProcess.length == 0) {
+			this.stop();
 		}
 	},
 	performAnimationFromEnd: function () {
-		for (var animationPropertyIndex in this.properties) {
-			this.properties[animationPropertyIndex].processAnimation(this.properties[animationPropertyIndex].getTotalAnimationTime() - (((+new Date()) - this.animationStartTime) * this.timeScale));
+		for (var animationIndex = 0; animationIndex < this.animationsToProcess.length; animationIndex++) {
+			this.animationsToProcess[animationIndex].processAnimation(this.animationsToProcess[animationIndex].getTotalAnimationTime() - (((+new Date()) - this.animationStartTime) * this.timeScale));
+			if (this.animationsToProcess[animationIndex].animationHasEnded) {
+				this.animationsToProcess.splice(animationIndex, 1);
+			}
+		}
+		if (this.animationsToProcess.length == 0) {
+			this.stop();
 		}
 	},
 	reverse: function () {
@@ -85,14 +97,15 @@ Infertek.Animations.Animation.prototype = {
 		for (var animationPropertyIndex in this.properties) {
 			this.properties[animationPropertyIndex].startAnimation(this.animationDirection);
 		}
+		this.animationsToProcess = this.properties.slice();
 		if (this.animationDirection == 1) {
 			this.animationInterval = setInterval(function () {
 				thisAnimationInstance.performAnimationFromStart();
-			}, 10);
+			}, 16); // 16 ms tylko dlatego, bo ekran ma odświeżanie ~60 Hz
 		} else {
 			this.animationInterval = setInterval(function () {
 				thisAnimationInstance.performAnimationFromEnd();
-			}, 10);
+			}, 16); // 16 ms tylko dlatego, bo ekran ma odświeżanie ~60 Hz
 		}
 	},
 	stop: function () {

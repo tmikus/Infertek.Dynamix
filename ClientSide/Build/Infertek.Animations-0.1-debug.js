@@ -71,11 +71,30 @@ Infertek.Animations.PropertyValueAnimators = {
 		return window.Infertek.Animations.PropertyValueAnimators.NumericValueAnimator(sourceValueNumber, destinationValueNumber, valueScale) + destinationValue.substr(destinationValueLength - 2, 2);
 	},
 	ColorAnimator: function (sourceValue, destinationValue, valueScale) {
-		// TODO: Dokumentacja i implementacja.
-		return valueScale >= 1 ? destinationValue : sourceValue;
+		/// <summary>
+		/// Manipuluje wartościami reprezentującymi kolory.
+		/// Wartości tych kolorów są wyciągane przez metodę pomocniczą <see cref="ParseRgbColorValue" />
+		/// </summary>
+		/// <param name="sourceValue">Wartość, od której zaczynana jest animacja.</param>
+		/// <param name="destinationValue">Wartość, do której dąży animacja.</param>
+		/// <param name="valueScale">Skala wartości. Zazwyczaj w przedziale od 0 do 1. Może nieco od niego odbiegać.</param>
+		/// <returns>Obliczona wartość animowanej własciwości wraz z typem jednostki.</returns>
+
+		return "rgb(" + Math.round(sourceValue[0] + ((destinationValue[0] - sourceValue[0]) * valueScale)) + ", "
+					  + Math.round(sourceValue[1] + ((destinationValue[1] - sourceValue[1]) * valueScale)) + ", "
+					  + Math.round(sourceValue[2] + ((destinationValue[2] - sourceValue[2]) * valueScale)) + ")";
 	},
 	OtherAnimator: function (sourceValue, destinationValue, valueScale) {
-		// TODO: Dokumentacja.
+		/// <summary>
+		/// Manipuluje wartościami reprezentującymi dowolne obiekty.
+		/// Jeżeli wartość <see cref="valueScale" /> jeszcze nie osiągnęła wartości 1 to zwraca <see cref="sourceValue" />.
+		/// Gdy wartość <see cref="valueScale" /> osiągnęła 1 to zwraca wartość <see cref="destinationValue" />
+		/// </summary>
+		/// <param name="sourceValue">Wartość, od której zaczynana jest animacja.</param>
+		/// <param name="destinationValue">Wartość, do której dąży animacja.</param>
+		/// <param name="valueScale">Skala wartości. Zazwyczaj w przedziale od 0 do 1. Może nieco od niego odbiegać.</param>
+		/// <returns>Obliczona wartość animowanej własciwości wraz z typem jednostki.</returns>
+
 		return valueScale >= 1 ? destinationValue : sourceValue;
 	}
 };
@@ -218,17 +237,23 @@ Infertek.Animations.AnimationProperty = function (animation, options) {
 		}
 	}
 	this.loadAnimatedElement();
-	if (this.propertyStartupValue == null) {
-		this.initializeStartupValue();
-	}
+	this.initializeStartupValue();
 };
 
 Infertek.Animations.AnimationProperty.prototype = {
-	initializeStartupValue	: function () {
+	initializeStartupValue: function () {
 		/// <summary>
 		/// Inicjuje wartość startową animacji.
 		/// </summary>
-		this.propertyStartupValue = this.animatedElement.css(this.propertyName);
+		if (this.propertyStartupValue == null) {
+			this.propertyStartupValue = this.animatedElement.css(this.propertyName);
+		}
+		if (this.valueAnimatorFunction == window.Infertek.Animations.PropertyValueAnimators.ColorAnimator) {
+			this.propertyStartupValue = ParseRgbColorValue(this.propertyStartupValue);
+			for (var keyframeIndex in this.keyframes) {
+				this.keyframes[keyframeIndex].targetValue = ParseRgbColorValue(this.keyframes[keyframeIndex].targetValue);
+			}
+		}
 	},
 	getElementSelector: function () {
 		/// <summary>
@@ -514,13 +539,25 @@ Infertek.Animations.Animation.prototype = {
 		}
 	},
 	performAnimationFromStart: function () {
-		for (var animationPropertyIndex in this.properties) {
-			this.properties[animationPropertyIndex].processAnimation(((+new Date()) - this.animationStartTime) * this.timeScale);
+		for (var animationIndex = 0; animationIndex < this.animationsToProcess.length; animationIndex++) {
+			this.animationsToProcess[animationIndex].processAnimation(((+new Date()) - this.animationStartTime) * this.timeScale);
+			if (this.animationsToProcess[animationIndex].animationHasEnded) {
+				this.animationsToProcess.splice(animationIndex, 1);
+			}
+		}
+		if (this.animationsToProcess.length == 0) {
+			this.stop();
 		}
 	},
 	performAnimationFromEnd: function () {
-		for (var animationPropertyIndex in this.properties) {
-			this.properties[animationPropertyIndex].processAnimation(this.properties[animationPropertyIndex].getTotalAnimationTime() - (((+new Date()) - this.animationStartTime) * this.timeScale));
+		for (var animationIndex = 0; animationIndex < this.animationsToProcess.length; animationIndex++) {
+			this.animationsToProcess[animationIndex].processAnimation(this.animationsToProcess[animationIndex].getTotalAnimationTime() - (((+new Date()) - this.animationStartTime) * this.timeScale));
+			if (this.animationsToProcess[animationIndex].animationHasEnded) {
+				this.animationsToProcess.splice(animationIndex, 1);
+			}
+		}
+		if (this.animationsToProcess.length == 0) {
+			this.stop();
 		}
 	},
 	reverse: function () {
@@ -541,14 +578,15 @@ Infertek.Animations.Animation.prototype = {
 		for (var animationPropertyIndex in this.properties) {
 			this.properties[animationPropertyIndex].startAnimation(this.animationDirection);
 		}
+		this.animationsToProcess = this.properties.slice();
 		if (this.animationDirection == 1) {
 			this.animationInterval = setInterval(function () {
 				thisAnimationInstance.performAnimationFromStart();
-			}, 10);
+			}, 16); // 16 ms tylko dlatego, bo ekran ma odświeżanie ~60 Hz
 		} else {
 			this.animationInterval = setInterval(function () {
 				thisAnimationInstance.performAnimationFromEnd();
-			}, 10);
+			}, 16); // 16 ms tylko dlatego, bo ekran ma odświeżanie ~60 Hz
 		}
 	},
 	stop: function () {

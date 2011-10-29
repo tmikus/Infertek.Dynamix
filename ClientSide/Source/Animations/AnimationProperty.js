@@ -37,17 +37,23 @@ Infertek.Animations.AnimationProperty = function (animation, options) {
 		}
 	}
 	this.loadAnimatedElement();
-	if (this.propertyStartupValue == null) {
-		this.initializeStartupValue();
-	}
+	this.initializeStartupValue();
 };
 
 Infertek.Animations.AnimationProperty.prototype = {
-	initializeStartupValue	: function () {
+	initializeStartupValue: function () {
 		/// <summary>
 		/// Inicjuje wartość startową animacji.
 		/// </summary>
-		this.propertyStartupValue = this.animatedElement.css(this.propertyName);
+		if (this.propertyStartupValue == null) {
+			this.propertyStartupValue = this.animatedElement.css(this.propertyName);
+		}
+		if (this.valueAnimatorFunction == window.Infertek.Animations.PropertyValueAnimators.ColorAnimator) {
+			this.propertyStartupValue = ParseRgbColorValue(this.propertyStartupValue);
+			for (var keyframeIndex in this.keyframes) {
+				this.keyframes[keyframeIndex].targetValue = ParseRgbColorValue(this.keyframes[keyframeIndex].targetValue);
+			}
+		}
 	},
 	getElementSelector: function () {
 		/// <summary>

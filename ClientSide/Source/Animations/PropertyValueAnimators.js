@@ -44,11 +44,30 @@ Infertek.Animations.PropertyValueAnimators = {
 		return window.Infertek.Animations.PropertyValueAnimators.NumericValueAnimator(sourceValueNumber, destinationValueNumber, valueScale) + destinationValue.substr(destinationValueLength - 2, 2);
 	},
 	ColorAnimator: function (sourceValue, destinationValue, valueScale) {
-		// TODO: Dokumentacja i implementacja.
-		return valueScale >= 1 ? destinationValue : sourceValue;
+		/// <summary>
+		/// Manipuluje wartościami reprezentującymi kolory.
+		/// Wartości tych kolorów są wyciągane przez metodę pomocniczą <see cref="ParseRgbColorValue" />
+		/// </summary>
+		/// <param name="sourceValue">Wartość, od której zaczynana jest animacja.</param>
+		/// <param name="destinationValue">Wartość, do której dąży animacja.</param>
+		/// <param name="valueScale">Skala wartości. Zazwyczaj w przedziale od 0 do 1. Może nieco od niego odbiegać.</param>
+		/// <returns>Obliczona wartość animowanej własciwości wraz z typem jednostki.</returns>
+
+		return "rgb(" + Math.round(sourceValue[0] + ((destinationValue[0] - sourceValue[0]) * valueScale)) + ", "
+					  + Math.round(sourceValue[1] + ((destinationValue[1] - sourceValue[1]) * valueScale)) + ", "
+					  + Math.round(sourceValue[2] + ((destinationValue[2] - sourceValue[2]) * valueScale)) + ")";
 	},
 	OtherAnimator: function (sourceValue, destinationValue, valueScale) {
-		// TODO: Dokumentacja.
+		/// <summary>
+		/// Manipuluje wartościami reprezentującymi dowolne obiekty.
+		/// Jeżeli wartość <see cref="valueScale" /> jeszcze nie osiągnęła wartości 1 to zwraca <see cref="sourceValue" />.
+		/// Gdy wartość <see cref="valueScale" /> osiągnęła 1 to zwraca wartość <see cref="destinationValue" />
+		/// </summary>
+		/// <param name="sourceValue">Wartość, od której zaczynana jest animacja.</param>
+		/// <param name="destinationValue">Wartość, do której dąży animacja.</param>
+		/// <param name="valueScale">Skala wartości. Zazwyczaj w przedziale od 0 do 1. Może nieco od niego odbiegać.</param>
+		/// <returns>Obliczona wartość animowanej własciwości wraz z typem jednostki.</returns>
+
 		return valueScale >= 1 ? destinationValue : sourceValue;
 	}
 };
