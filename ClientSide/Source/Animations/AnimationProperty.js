@@ -136,7 +136,7 @@ Infertek.Animations.AnimationProperty.prototype = {
 		if (this.elementSelector == null || this.elementSelector == "") {
 			this.animatedElement = this.animation.getAnimatedElement();
 		} else {
-			this.animatedElement = jQuery(this.elementSelector, this.animation.getAnimatedElement());
+			this.animatedElement = $(this.elementSelector, this.animation.getAnimatedElement());
 		}
 	},
 	loadKeyframes: function (keyframesConfiguration) {
