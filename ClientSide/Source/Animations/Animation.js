@@ -27,6 +27,8 @@ Infertek.Animations.Animation = function (animatedElement, options) {
 		}
 		if (options.timeScale != null)
 			this.timeScale = options.timeScale;
+		if (options.complete != null)
+			this.animationCompleted = options.complete;
 	}
 };
 
@@ -65,6 +67,9 @@ Infertek.Animations.Animation.prototype = {
 			}
 		}
 		if (this.animationsToProcess.length == 0) {
+			if (this.animationCompleted != null) {
+				this.animationCompleted(this);
+			}
 			this.stop();
 		}
 	},
@@ -76,6 +81,9 @@ Infertek.Animations.Animation.prototype = {
 			}
 		}
 		if (this.animationsToProcess.length == 0) {
+			if (this.animationCompleted != null) {
+				this.animationCompleted(this);
+			}
 			this.stop();
 		}
 	},
