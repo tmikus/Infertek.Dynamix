@@ -50,7 +50,7 @@ Infertek.Animations.AnimationProperty.prototype = {
 		}
 		if (this.valueAnimatorFunction == window.Infertek.Animations.PropertyValueAnimators.ColorAnimator) {
 			this.propertyStartupValue = ParseRgbColorValue(this.propertyStartupValue);
-			for (var keyframeIndex in this.keyframes) {
+			for (var keyframeIndex = 0; keyframeIndex < this.keyframes.length; keyframeIndex++) {
 				this.keyframes[keyframeIndex].targetValue = ParseRgbColorValue(this.keyframes[keyframeIndex].targetValue);
 			}
 		}
@@ -147,7 +147,7 @@ Infertek.Animations.AnimationProperty.prototype = {
 		/// poszczególnych klatek animacji.</para>
 		/// </summary>
 		/// <param name="keyframesConfiguration">Konfiguracja wszystkich klatek animacji.</param>
-		for (var keyframeOptionsIndex in keyframesConfiguration) {
+		for (var keyframeOptionsIndex = 0; keyframeOptionsIndex < keyframesConfiguration.length; keyframeOptionsIndex++) {
 			var keyframeInstance = new window.Infertek.Animations.AnimationKeframe(this.valueAnimatorFunction, keyframesConfiguration[keyframeOptionsIndex]);
 			this.keyframes.push(keyframeInstance);
 			this.totalAnimationTime += keyframeInstance.getDuration() + keyframeInstance.getOffset();

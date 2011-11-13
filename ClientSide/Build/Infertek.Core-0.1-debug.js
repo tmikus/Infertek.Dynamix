@@ -242,7 +242,7 @@ Infertek.ScriptManager = {
 		if (scriptsToLoad != null && Array.isArray(scriptsToLoad)) {
 			if (scriptsToLoad.length > 0) {
 				var numberOfLoadedScripts = 0;
-				for (var scriptIndex in scriptsToLoad) {
+				for (var scriptIndex = 0; scriptIndex < scriptsToLoad.length; scriptIndex++) {
 					$.getScript(scriptsToLoad[scriptIndex], function () {
 						numberOfLoadedScripts++;
 						if(numberOfLoadedScripts == scriptsToLoad.length) {

@@ -55,7 +55,7 @@ Infertek.Animations.Animation.prototype = {
 		/// </summary>
 		/// <param name="propertiesConfiguration">Konfiguracja animacji właściwości do wczytania.</param>
 
-		for (var propertyConfigurationIndex in propertiesConfiguration) {
+		for (var propertyConfigurationIndex = 0; propertyConfigurationIndex < propertiesConfiguration.length; propertyConfigurationIndex++) {
 			this.properties.push(new window.Infertek.Animations.AnimationProperty(this, propertiesConfiguration[propertyConfigurationIndex]));
 		}
 	},
@@ -102,7 +102,7 @@ Infertek.Animations.Animation.prototype = {
 		var thisAnimationInstance = this;
 		this.animationStartTime = +new Date();
 		this.animationHasStarted = true;
-		for (var animationPropertyIndex in this.properties) {
+		for (var animationPropertyIndex = 0; animationPropertyIndex < this.properties.length; animationPropertyIndex++) {
 			this.properties[animationPropertyIndex].startAnimation(this.animationDirection);
 		}
 		this.animationsToProcess = this.properties.slice();

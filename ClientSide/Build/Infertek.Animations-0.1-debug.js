@@ -266,7 +266,7 @@ Infertek.Animations.AnimationProperty.prototype = {
 		}
 		if (this.valueAnimatorFunction == window.Infertek.Animations.PropertyValueAnimators.ColorAnimator) {
 			this.propertyStartupValue = ParseRgbColorValue(this.propertyStartupValue);
-			for (var keyframeIndex in this.keyframes) {
+			for (var keyframeIndex = 0; keyframeIndex < this.keyframes.length; keyframeIndex++) {
 				this.keyframes[keyframeIndex].targetValue = ParseRgbColorValue(this.keyframes[keyframeIndex].targetValue);
 			}
 		}
@@ -363,7 +363,7 @@ Infertek.Animations.AnimationProperty.prototype = {
 		/// poszczególnych klatek animacji.</para>
 		/// </summary>
 		/// <param name="keyframesConfiguration">Konfiguracja wszystkich klatek animacji.</param>
-		for (var keyframeOptionsIndex in keyframesConfiguration) {
+		for (var keyframeOptionsIndex = 0; keyframeOptionsIndex < keyframesConfiguration.length; keyframeOptionsIndex++) {
 			var keyframeInstance = new window.Infertek.Animations.AnimationKeframe(this.valueAnimatorFunction, keyframesConfiguration[keyframeOptionsIndex]);
 			this.keyframes.push(keyframeInstance);
 			this.totalAnimationTime += keyframeInstance.getDuration() + keyframeInstance.getOffset();
@@ -552,7 +552,7 @@ Infertek.Animations.Animation.prototype = {
 		/// </summary>
 		/// <param name="propertiesConfiguration">Konfiguracja animacji właściwości do wczytania.</param>
 
-		for (var propertyConfigurationIndex in propertiesConfiguration) {
+		for (var propertyConfigurationIndex = 0; propertyConfigurationIndex < propertiesConfiguration.length; propertyConfigurationIndex++) {
 			this.properties.push(new window.Infertek.Animations.AnimationProperty(this, propertiesConfiguration[propertyConfigurationIndex]));
 		}
 	},
@@ -599,7 +599,7 @@ Infertek.Animations.Animation.prototype = {
 		var thisAnimationInstance = this;
 		this.animationStartTime = +new Date();
 		this.animationHasStarted = true;
-		for (var animationPropertyIndex in this.properties) {
+		for (var animationPropertyIndex = 0; animationPropertyIndex < this.properties.length; animationPropertyIndex++) {
 			this.properties[animationPropertyIndex].startAnimation(this.animationDirection);
 		}
 		this.animationsToProcess = this.properties.slice();
