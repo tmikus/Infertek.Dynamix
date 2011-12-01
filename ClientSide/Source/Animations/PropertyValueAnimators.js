@@ -27,6 +27,18 @@ Infertek.Animations.PropertyValueAnimators = {
 
 		return Math.round(sourceValue + ((destinationValue - sourceValue) * valueScale));
 	},
+	FloatingPointValueAnimator: function (sourceValue, destinationValue, valueScale) {
+		/// <summary>
+		/// Manipuluje wartościami numerycznymi.
+		/// Argumenty 'sourceValue' i 'destinationValue' są liczbami.
+		/// </summary>
+		/// <param name="sourceValue">Wartość, od której zaczynana jest animacja.</param>
+		/// <param name="destinationValue">Wartość, do której dąży animacja.</param>
+		/// <param name="valueScale">Skala wartości. Zazwyczaj w przedziale od 0 do 1. Może nieco od niego odbiegać.</param>
+		/// <returns>Obliczona wartość animowanej własciwości numerycznej.</returns>
+
+		return sourceValue + ((destinationValue - sourceValue) * valueScale);
+	},
 	SizeAnimator: function (sourceValue, destinationValue, valueScale) {
 		/// <summary>
 		/// Manipuluje wartościami reprezentującymi rozmiary i położenie obiektów.

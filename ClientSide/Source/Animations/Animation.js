@@ -48,6 +48,13 @@ Infertek.Animations.Animation.prototype = {
 		/// <returns type="Number" />
 		return this.animationDirection;
 	},
+	setAnimationCompletedCallback: function(callback) {
+		/// <summary>
+		///	 Ustawia callback, jaki ma być wywoływany po zakończeniu animacji.
+		/// </summary>
+		/// <param name="callback">Funkcja callback jaka ma być ustawiona do tej animacji</param>
+		this.animationCompleted = callback;
+	},
 	loadProperties: function (propertiesConfiguration) {
 		/// <summary>
 		/// Wczytuje konfigurację animacji własciwości obiektu DOM

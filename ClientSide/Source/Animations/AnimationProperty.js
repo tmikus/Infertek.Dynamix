@@ -124,6 +124,9 @@ Infertek.Animations.AnimationProperty.prototype = {
 			case "z-index":
 				this.valueAnimatorFunction = window.Infertek.Animations.PropertyValueAnimators.SizeAnimator;
 				break;
+			case "opacity":
+				this.valueAnimatorFunction = window.Infertek.Animations.PropertyValueAnimators.FloatingPointValueAnimator;
+				break;
 			default:
 				this.valueAnimatorFunction = window.Infertek.Animations.PropertyValueAnimators.OtherAnimator;
 		}

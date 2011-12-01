@@ -54,6 +54,18 @@ Infertek.Animations.PropertyValueAnimators = {
 
 		return Math.round(sourceValue + ((destinationValue - sourceValue) * valueScale));
 	},
+	FloatingPointValueAnimator: function (sourceValue, destinationValue, valueScale) {
+		/// <summary>
+		/// Manipuluje wartościami numerycznymi.
+		/// Argumenty 'sourceValue' i 'destinationValue' są liczbami.
+		/// </summary>
+		/// <param name="sourceValue">Wartość, od której zaczynana jest animacja.</param>
+		/// <param name="destinationValue">Wartość, do której dąży animacja.</param>
+		/// <param name="valueScale">Skala wartości. Zazwyczaj w przedziale od 0 do 1. Może nieco od niego odbiegać.</param>
+		/// <returns>Obliczona wartość animowanej własciwości numerycznej.</returns>
+
+		return sourceValue + ((destinationValue - sourceValue) * valueScale);
+	},
 	SizeAnimator: function (sourceValue, destinationValue, valueScale) {
 		/// <summary>
 		/// Manipuluje wartościami reprezentującymi rozmiary i położenie obiektów.
@@ -340,6 +352,9 @@ Infertek.Animations.AnimationProperty.prototype = {
 			case "z-index":
 				this.valueAnimatorFunction = window.Infertek.Animations.PropertyValueAnimators.SizeAnimator;
 				break;
+			case "opacity":
+				this.valueAnimatorFunction = window.Infertek.Animations.PropertyValueAnimators.FloatingPointValueAnimator;
+				break;
 			default:
 				this.valueAnimatorFunction = window.Infertek.Animations.PropertyValueAnimators.OtherAnimator;
 		}
@@ -544,6 +559,13 @@ Infertek.Animations.Animation.prototype = {
 		/// </summary>
 		/// <returns type="Number" />
 		return this.animationDirection;
+	},
+	setAnimationCompletedCallback: function(callback) {
+		/// <summary>
+		///	 Ustawia callback, jaki ma być wywoływany po zakończeniu animacji.
+		/// </summary>
+		/// <param name="callback">Funkcja callback jaka ma być ustawiona do tej animacji</param>
+		this.animationCompleted = callback;
 	},
 	loadProperties: function (propertiesConfiguration) {
 		/// <summary>
