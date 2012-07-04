@@ -20,14 +20,14 @@ Infertek.Animations.Animation = function (animatedElement, options) {
 	this.properties = [];
 
 	if (options !== null) {
-		if (options.animationDirection !== null)
+		if (options.animationDirection !== undefined)
 			this.animationDirection = options.animationDirection;
-		if (options.properties !== null && Array.isArray(options.properties)) {
+		if (options.properties !== undefined && Array.isArray(options.properties)) {
 			this.loadProperties(options.properties);
 		}
-		if (options.timeScale !== null)
+		if (options.timeScale !== undefined)
 			this.timeScale = options.timeScale;
-		if (options.complete !== null)
+		if (options.complete !== undefined)
 			this.animationCompleted = options.complete;
 	}
 };
@@ -82,7 +82,7 @@ Infertek.Animations.Animation.prototype = {
 			}
 		}
 		if (this.animationsToProcess.length === 0) {
-			if (this.animationCompleted !== null) {
+			if (this.animationCompleted !== undefined) {
 				this.animationCompleted(this);
 			}
 			this.stop();
@@ -101,7 +101,7 @@ Infertek.Animations.Animation.prototype = {
 			}
 		}
 		if (this.animationsToProcess.length === 0) {
-			if (this.animationCompleted !== null) {
+			if (this.animationCompleted !== undefined) {
 				this.animationCompleted(this);
 			}
 			this.stop();

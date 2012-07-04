@@ -20,17 +20,17 @@ Infertek.Animations.AnimationProperty = function (animation, options) {
 	this.totalAnimationTime = 0;
 	this.keyframes = [];
 
-	if (options !== null) {
-		if (options.elementSelector !== null) {
+	if (options !== undefined) {
+		if (options.elementSelector !== undefined) {
 			this.elementSelector = options.elementSelector;
 		}
-		if (options.propertyName !== null) {
+		if (options.propertyName !== undefined) {
 			this.propertyName = options.propertyName;
 			this.initializeValueAnimatorFunction();
 		}
-		if (options.startupValue !== null)
+		if (options.startupValue !== undefined)
 			this.propertyStartupValue = options.startupValue;
-		if (options.keyframes !== null && Array.isArray(options.keyframes)) {
+		if (options.keyframes !== undefined && Array.isArray(options.keyframes)) {
 			this.loadKeyframes(options.keyframes);
 		}
 	}
@@ -44,7 +44,7 @@ Infertek.Animations.AnimationProperty.prototype = {
 		/// Inicjuje wartość startową animacji.
 		/// </summary>
         
-		if (this.propertyStartupValue == null) {
+		if (this.propertyStartupValue == undefined) {
 			this.propertyStartupValue = this.animatedElement.css(this.propertyName);
 		}
 		if (this.valueAnimatorFunction == window.Infertek.Animations.PropertyValueAnimators.ColorAnimator) {
@@ -265,7 +265,7 @@ Infertek.Animations.AnimationProperty.prototype = {
 		/// <para>-1 animacja idzie 'do tyłu'.</para>
 		/// </param>
         
-		if (this.keyframes !== null && this.keyframes.length > 0) {
+		if (this.keyframes !== undefined && this.keyframes.length > 0) {
 			this.animationDirection = animationDirection;
 			this.animationHasEnded = false;
 			this.elapsedAnimationTime = 0;

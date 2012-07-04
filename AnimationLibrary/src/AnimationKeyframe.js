@@ -18,15 +18,15 @@ Infertek.Animations.AnimationKeframe = function (valueAnimatorFunction, options)
 	this.targetValue = null;
 	this.valueAnimatorFunction = valueAnimatorFunction;
 
-	if (options !== null) {
-		if (options.duration !== null)
+	if (options !== undefined) {
+		if (options.duration !== undefined)
 			this.duration = options.duration;
-		if (options.blending !== null) {
+		if (options.blending !== undefined) {
 			this.blendingFunction = window.Infertek.Animations.FrameBlendingFunctions.GetBlendingByName(options.blending);
 		}
-		if (options.offset !== null)
+		if (options.offset !== undefined)
 			this.offset = options.offset;
-		if (options.targetValue !== null)
+		if (options.targetValue !== undefined)
 			this.targetValue = options.targetValue;
 	}
 };
